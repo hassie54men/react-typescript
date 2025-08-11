@@ -8,107 +8,84 @@ export default function App() {
     url: 'https://api.freecurrencyapi.com/v1/',
   };
 
-  const [value, setValue] = useState('')
+  const [valueBase, setValueBase] = useState('')
+  const [valueRub, setValueRub] = useState('')
   const [valute, setValute] = useState<Record<string, number> | null>(null);
+  const [rub, setRub] = useState<number | null>(null);
+  const [show, setShow] = useState(false)
 
- function changeValue(event: React.ChangeEvent<HTMLInputElement>) {
-    setValue(event.target.value.toUpperCase())
+ function changeValueBase(event: React.ChangeEvent<HTMLInputElement>) {
+   setValueBase(event.target.value.toUpperCase())
   }
- async function findValute() {
-    const data = await apiValute()
-   setValute(data.data)
-   console.log(data.data.USD)
+  function changeValueRub(event: React.ChangeEvent<HTMLInputElement>) {
+    setValueRub(event.target.value.toUpperCase())
   }
 
   async function apiValute(){
-    const response = await fetch(`${apiConfig.url}latest?apikey=${apiConfig.key}&base_currency=${value}`)
-    return response.json()
+    const response = await fetch(`${apiConfig.url}latest?apikey=${apiConfig.key}&base_currency=${valueBase}`)
+    const data = await response.json()
+    console.log(data.data)
+    setValute(data.data)
+  }
+  async function apiValuteRub(){
+    const response = await fetch(`${apiConfig.url}latest?apikey=${apiConfig.key}&base_currency=${valueRub}&currencies=RUB`)
+    const data = await response.json()
+    console.log(data.data.RUB)
+    setRub(data.data.RUB)
+    setShow(true)
+    if (valueRub === '') {
+      setShow(false)
+    }
   }
 
-
   return (
-    <>
-      <label htmlFor="">
-        <input type="text" placeholder={'введите валюту'} value={value} onChange={changeValue}/>
-        <Button onClick={findValute} >найти</Button>
-      </label>
-        <ul>
-          {valute && Object.entries(valute).map(([currency, rate]) => (
-             <li key={currency}>{currency}: {rate.toFixed(4)}</li>
-          ))}
-        </ul>
-    </>
+     <div className="app-container">
+       <h1 className="app-title">Конвертер валют</h1>
+
+       <div className="currency-block">
+         <label>
+           <input
+              type="text"
+              placeholder="Введите базовую валюту (USD, EUR...)"
+              value={valueBase}
+              onChange={changeValueBase}
+              maxLength={3}
+           />
+           <Button onClick={apiValute}>Найти</Button>
+           <Button onClick={() => setValute(null)} className="secondary">Скрыть</Button>
+         </label>
+
+         {valute && (
+            <ul>
+              {Object.entries(valute).map(([currency, rate]) => (
+                 <li key={currency} className={currency === 'RUB' ? 'highlight' : ''}>
+                   {currency}: {rate.toFixed(4)}
+                 </li>
+              ))}
+            </ul>
+         )}
+       </div>
+
+       <div className="currency-block">
+         <label>
+           <input
+              type="text"
+              placeholder="Введите валюту для конвертации в RUB"
+              value={valueRub}
+              onChange={changeValueRub}
+              maxLength={3}
+           />
+           <Button onClick={apiValuteRub}>Конвертировать</Button>
+         </label>
+
+         {show && rub !== null && (
+            <ul>
+              <li className="highlight">
+                {rub.toFixed(4)} RUB
+              </li>
+            </ul>
+         )}
+       </div>
+     </div>
   )
 }
-
-
-
-
-// import { useState } from 'react';
-// import './App.css';
-// import Button from './components/Button.tsx';
-//
-// export default function App() {
-//   const [baseCurrency, setBaseCurrency] = useState('');
-//   const [rates, setRates] = useState<Record<string, number> | null>(null);
-//   const [error, setError] = useState<string | null>(null);
-//
-//   const apiConfig = {
-//     key: 'fca_live_fCuXdLSDeCeIwwJU0sLqTCutBkrRv0Mp2fGWJH9J',
-//     url: 'https://api.freecurrencyapi.com/v1/',
-//   };
-//
-//   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-//     setBaseCurrency(event.target.value.toUpperCase());
-//     setError(null); // Сбрасываем ошибку при новом вводе
-//   }
-//
-//   async function fetchRates() {
-//     if (!baseCurrency) {
-//       setError('Введите код валюты (например, USD)');
-//       return;
-//     }
-//
-//     try {
-//       const response = await fetch(
-//          `${apiConfig.url}latest?apikey=${apiConfig.key}&base_currency=${baseCurrency}`
-//       );
-//       if (!response.ok) {
-//         throw new Error('Ошибка при запросе к API');
-//       }
-//       const data = await response.json();
-//       setRates(data.data); // Сохраняем только объект с курсами
-//       setError(null);
-//     } catch (err) {
-//       setError('Не удалось загрузить курсы. Проверьте код валюты или подключение.');
-//       console.error(err);
-//     }
-//   }
-//
-//   return (
-//      <>
-//        <label>
-//          <input
-//             type="text"
-//             placeholder="Введите валюту (например, USD)"
-//             value={baseCurrency}
-//             onChange={handleInputChange}
-//          />
-//          <Button onClick={fetchRates}>Найти</Button>
-//        </label>
-//        {error && <p style={{ color: 'red' }}>{error}</p>}
-//        {rates && (
-//           <div>
-//             <h3>Курсы валют для {baseCurrency}:</h3>
-//             <ul>
-//               {Object.entries(rates).map(([currency, rate]) => (
-//                  <li key={currency}>
-//                    {currency}: {rate.toFixed(4)}
-//                  </li>
-//               ))}
-//             </ul>
-//           </div>
-//        )}
-//      </>
-//   );
-// }
