@@ -45,6 +45,7 @@ export default function ToDo() {
        <ul>
          {todo.map((item,index) => (
             <>
+              <input type="checkbox" onChange={() => console.log(`выбрано дело под номером ${index + 1}`)}/>
               <li key={index}>{item}</li>
               <Button onClick={() => deleteTodo(index)}>Удалить</Button>
             </>
