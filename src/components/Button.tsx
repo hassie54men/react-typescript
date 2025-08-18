@@ -1,11 +1,4 @@
-//
-// import type { PropsWithChildren } from 'react';
-//
-// export default function Button({ children}: PropsWithChildren) {
-//   return (
-//      <button>{children}</button>
-//   )
-// }
+
 import type { ReactNode, MouseEvent } from 'react';
 import * as React from "react";
 
@@ -19,7 +12,7 @@ interface ButtonProps {
 export default function Button(
    {
      children,
-      ...props
+     ...props
 }: ButtonProps) {
   return (
      <button
