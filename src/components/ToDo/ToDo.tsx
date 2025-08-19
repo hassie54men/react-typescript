@@ -4,12 +4,29 @@ import * as React from "react";
 
 export default function ToDo() {
 
+  type TodoItem = {
+    id: number;
+    text: string;
+    completed: boolean;
+  };
+
   const [value, setValue] = useState<string>('')
-  const [todo, setTodo] = useState<string[]>([])
+  const [todos, setTodos] = useState<TodoItem[]>([]);
+
+  function toggleTodo(id: number) {
+    setTodos(todos.map(todo =>
+       todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    ));
+  }
+
 
   function addTodo() {
     if (value.trim() !== '') {
-      setTodo([...todo, value])
+      setTodos([...todos, {
+        id: Math.random(),
+        text: value,
+        completed: false,
+      }])
       setValue('')
     }
   }
@@ -20,13 +37,12 @@ export default function ToDo() {
   }
 
   function clearTodos() {
-    setTodo([])
+    setTodos([])
   }
 
   function deleteTodo(index: number){
-    setTodo(todo.filter((_, item) => item !== index))
+    setTodos(todos.filter((_, item) => item !== index))
   }
-
 
 
   return (
@@ -43,12 +59,16 @@ export default function ToDo() {
          <Button onClick={addTodo}>Добавить</Button>
        </label>
        <ul>
-         {todo.map((item,index) => (
-            <>
-              <input type="checkbox" onChange={() => console.log(`выбрано дело под номером ${index + 1}`)}/>
-              <li key={index}>{item}</li>
+         {todos.map((item,index) => (
+            <div className='todo-item' style={{borderColor: item.completed ? 'red' : 'black' }} key={item.id}>
+              <input
+                 type="checkbox"
+                 checked={item.completed}
+                 onChange={() => toggleTodo(item.id)}
+              />
+              <li>{item.text}</li>
               <Button onClick={() => deleteTodo(index)}>Удалить</Button>
-            </>
+            </div>
          ))
          }
        </ul>
