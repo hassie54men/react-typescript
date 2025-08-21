@@ -1,4 +1,4 @@
-import Button from "../Button.tsx";
+import Button from "../Button";
 import {useState} from "react";
 import * as React from "react";
 
@@ -14,25 +14,29 @@ export default function ToDo() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
 
   function toggleTodo(id: number) {
-    setTodos(todos.map(todo =>
-       todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    setTodos((todos) => todos.map(todo =>
+       todo.id === id ? { ...todo, completed: !todo.completed} : todo
     ));
+
   }
 
 
-  function addTodo() {
+  function addTodo(value) {
     if (value.trim() !== '') {
-      setTodos([...todos, {
-        id: Math.random(),
-        text: value,
-        completed: false,
-      }])
+      setTodos((todos) => [
+        ...todos,
+        {
+          id: todos.length + 1,
+          text: value,
+          completed: false,
+        },
+      ])
       setValue('')
     }
   }
   function addTodoEnter(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
-      addTodo()
+      addTodo(value)
     }
   }
 
@@ -40,26 +44,25 @@ export default function ToDo() {
     setTodos([])
   }
 
-  function deleteTodo(index: number){
-    setTodos(todos.filter((_, item) => item !== index))
+  function deleteTodo(id: number){
+    setTodos(todos.filter((item) => item.id !== id))
   }
 
 
   return (
-     <div>
-       <label>
+     <div onKeyDown={addTodoEnter}>
          <Button onClick={clearTodos}>Очистить</Button>
-         <input
-            type="text"
-            placeholder='введите задачу'
-            value={value}
-            onChange={event => setValue(event.target.value)}
-            onKeyDown={addTodoEnter}
-         />
+         <label>
+           <input
+              type="text"
+              placeholder='введите задачу'
+              value={value}
+              onChange={event => setValue(event.target.value)}
+           />
+         </label>
          <Button onClick={addTodo}>Добавить</Button>
-       </label>
        <ul>
-         {todos.map((item,index) => (
+         {todos.map((item) => (
             <div className='todo-item' style={{borderColor: item.completed ? 'red' : 'black' }} key={item.id}>
               <input
                  type="checkbox"
@@ -67,7 +70,7 @@ export default function ToDo() {
                  onChange={() => toggleTodo(item.id)}
               />
               <li>{item.text}</li>
-              <Button onClick={() => deleteTodo(index)}>Удалить</Button>
+              <Button onClick={() => deleteTodo(item.id)}>Удалить</Button>
             </div>
          ))
          }

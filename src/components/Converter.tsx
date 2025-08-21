@@ -1,5 +1,5 @@
 import {useState} from "react";
-import Button from "./Button.tsx";
+import Button from "./Button";
 
 export default function Converter() {
   const apiConfig = {
