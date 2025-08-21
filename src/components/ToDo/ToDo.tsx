@@ -33,6 +33,7 @@ export default function ToDo() {
         },
       ])
       setValue('')
+      console.log('hello')
     }
   }
   function addTodoEnter(event: React.KeyboardEvent<HTMLInputElement>) {
