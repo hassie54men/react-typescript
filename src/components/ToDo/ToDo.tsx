@@ -21,7 +21,8 @@ export default function ToDo() {
   }
 
 
-  function addTodo(value) {
+  function addTodo(e: React.FormEvent) {
+    e.preventDefault()
     if (value.trim() !== '') {
       setTodos((todos) => [
         ...todos,
@@ -36,7 +37,7 @@ export default function ToDo() {
   }
   function addTodoEnter(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'Enter') {
-      addTodo(value)
+      addTodo(event)
     }
   }
 
@@ -52,6 +53,7 @@ export default function ToDo() {
   return (
      <div onKeyDown={addTodoEnter}>
          <Button onClick={clearTodos}>Очистить</Button>
+       <form action="" onSubmit={addTodo}>
          <label>
            <input
               type="text"
@@ -60,7 +62,8 @@ export default function ToDo() {
               onChange={event => setValue(event.target.value)}
            />
          </label>
-         <Button onClick={addTodo}>Добавить</Button>
+         <Button>Добавить</Button>
+       </form>
        <ul>
          {todos.map((item) => (
             <div className='todo-item' style={{borderColor: item.completed ? 'red' : 'black' }} key={item.id}>
