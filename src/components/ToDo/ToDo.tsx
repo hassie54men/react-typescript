@@ -12,6 +12,7 @@ export default function ToDo() {
 
   const [value, setValue] = useState<string>('')
   const [todos, setTodos] = useState<TodoItem[]>([]);
+  // const [count, setCount] = useState<boolean | []>(false)
 
   function toggleTodo(id: number) {
     setTodos((todos) => todos.map(todo =>
@@ -49,7 +50,6 @@ export default function ToDo() {
   function deleteTodo(id: number){
     setTodos(todos.filter((item) => item.id !== id))
   }
-
 
   return (
      <div onKeyDown={addTodoEnter}>
