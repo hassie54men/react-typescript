@@ -2,8 +2,22 @@ import {useEffect, useState} from "react";
 import * as React from "react";
 import './RickAndMorty.css'
 
+interface Character {
+  id: number;
+  name: string;
+  gender: string;
+  location: {
+    name: string;
+  };
+  image: string;
+}
+
+interface ApiResponse {
+  results: Character[];
+}
+
 export default function RickAndMorty(){
-  const [result, setResult] = useState()
+  const [result, setResult] = useState<ApiResponse | null>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,7 +33,7 @@ export default function RickAndMorty(){
 
   return(
      <ul className='card-list'>
-       {result && result.results?.map((item, index) => (
+       {result && result.results.map((item, index) => (
           <li key={index} className='card-item'>
             <p>{item.name}</p>
             <p>{item.gender}</p>
