@@ -9,7 +9,7 @@ interface ButtonProps {
   onKeyDown?: (event: React.KeyboardEvent<HTMLButtonElement>) => void;
 }
 
-export default function Button(
+export default function Buttons(
    {
      children,
      ...props

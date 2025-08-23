@@ -1,4 +1,4 @@
-import Button from "../Button";
+import Buttons from "../Buttons";
 import {useState} from "react";
 import * as React from "react";
 
@@ -53,7 +53,7 @@ export default function ToDo() {
 
   return (
      <div onKeyDown={addTodoEnter}>
-         <Button onClick={clearTodos}>Очистить</Button>
+         <Buttons onClick={clearTodos}>Очистить</Buttons>
        <form action="" onSubmit={addTodo}>
          <label>
            <input
@@ -63,7 +63,7 @@ export default function ToDo() {
               onChange={event => setValue(event.target.value)}
            />
          </label>
-         <Button>Добавить</Button>
+         <Buttons>Добавить</Buttons>
        </form>
        <ul>
          {todos.map((item) => (
@@ -74,7 +74,7 @@ export default function ToDo() {
                  onChange={() => toggleTodo(item.id)}
               />
               <li>{item.text}</li>
-              <Button onClick={() => deleteTodo(item.id)}>Удалить</Button>
+              <Buttons onClick={() => deleteTodo(item.id)}>Удалить</Buttons>
             </div>
          ))
          }

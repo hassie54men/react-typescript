@@ -1,5 +1,5 @@
 import {useState} from "react";
-import Button from "./Button";
+import Buttons from "./Buttons";
 
 export default function Converter() {
   const apiConfig = {
@@ -50,8 +50,8 @@ export default function Converter() {
               onChange={changeValueBase}
               maxLength={3}
            />
-           <Button onClick={apiValute}>Найти</Button>
-           <Button onClick={() => setValute(null)}>Скрыть</Button>
+           <Buttons onClick={apiValute}>Найти</Buttons>
+           <Buttons onClick={() => setValute(null)}>Скрыть</Buttons>
          </label>
 
          {valute && (
@@ -75,7 +75,7 @@ export default function Converter() {
               onChange={changeValueRub}
               maxLength={3}
            />
-           <Button onClick={apiValuteRub}>Конвертировать</Button>
+           <Buttons onClick={apiValuteRub}>Конвертировать</Buttons>
          </label>
 
          {show && rub !== null && (
